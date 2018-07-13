@@ -151,7 +151,7 @@ int OSCARAnalyzer::ParseDefineLine(const char * line_to_parse)
     
     if(DetectorType.compare("OSCAR")==0) {
       int NumTelescopes;
-      LineStream>>NumTelescopes;
+      LineStream>>NumTelescopes;      
       OSDetector * new_detector = new OSOSCAR(DetectorName.c_str(),NumTelescopes);
       (*fRegisteredDetectors)[DetectorName]=new_detector;
       NDetectorsAdded++;

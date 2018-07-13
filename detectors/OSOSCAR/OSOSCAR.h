@@ -8,19 +8,31 @@
  * implemented by Daniele Dell'Aquila (dellaquila.daniele@gmail.com)
  * 
  * The class is composed by:
- * 1 OSOSCARCluster
+ * 1 OSOSCARTelescope *
+ * This is an array of OSCAR telescopes
  *
- *
- * class OSOSCARCluster : it contains an array of OSOSCARTelescope objects
  *
  * - OSOSCARTelescope
- * | - OSStrip
- * | - OSPad
+ * | - OSOSCARStrip *
+ * | - OSOSCARPad *
+ * 
+ * - OSOSCARStrip
+ * | - efront
+ * | - timefront
+ * 
+ * - OSOSCARPad
+ * | - epad
+ * | - timepad
  */
 
 #include <TTree.h>
+#include <vector>
 #include <OSDetector.h>
+#include <OSOSCARMap.h>
+#include <OSOSCARTelescope.h>
+#include <OSOSCARAnalyzer.h>
 #include <OSOSCARRootEvent.h>
+#include <OSOSCARPhysicalParticle.h>
 
 #include <OSCARShared.h>
 
@@ -37,8 +49,11 @@ public :
   void FillMappedData() override;                  //!Stores mapped data in detector ROOT class to be written on the output tree
 
 private :
-//   OSOSCARCluster * fOSCARMapped;                    //!OSOSCARCluster containing event-by-event mapped data of the entire cluster of OSCAR telescopes (in the trivial case just 1)
+  OSOSCARTelescope ** fOSCARMapped;                //!Cluster of OSOSCARTelescope objects
   OSOSCARRootEvent * fevt;                         //!RootEvent type of the detector
+  OSOSCARAnalyzer  * fTheAnalyzer;                 //!Detector analyzer
+  
+  std::vector<OSOSCARPhysicalParticle> * fParticle; //!Analyzed event
 
 };
 

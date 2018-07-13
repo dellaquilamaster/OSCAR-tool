@@ -78,7 +78,7 @@ void OSCARRawDataReader::ProcessRawTree()
     fAnalyzer->MapDetectors();
     
     //Fill mapped data
-    fAnalyzer->FillMappedEvent();
+    fAnalyzer->FillMappedEvent();      
   }
 }
 
