@@ -16,12 +16,12 @@ RLIBS     := -L$(OSCARLIB)
 
 CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
 
-OSOSCAR_DICT  := OSOScarDict.$(SrcSuf)
+OSOSCAR_DICT  := OSOSCARDict.$(SrcSuf)
 OSOSCAR_DICTH := $(OSOSCAR_DICT:.$(SrcSuf)=.h)
 OSOSCAR_DICTO := $(OSOSCAR_DICT:.$(SrcSuf)=.$(ObjSuf))
-OSOSCAR_PCM   := OSOScarDict$(PcmSuf)
+OSOSCAR_PCM   := OSOSCARDict$(PcmSuf)
+OSOSCAR_HDRS  := $(wildcard OS*.$(SrcSuf))
 
-OSOSCAR_HDRS  := $(wildcard HT*.$(SrcSuf))
 
 OSOSCAR_HDRS  := $(OSOSCAR_HDRS:.$(SrcSuf)=.h) OSOSCARLinkDef.h
 OSOSCAR_HDRS  := $(filter-out $(OSOSCAR_DICTH),$(OSOSCAR_HDRS))
@@ -40,7 +40,7 @@ all: $(OSOSCAR_LIB)
 
 $(OSOSCAR_DICT): $(OSOSCAR_HDRS)
 	@echo "Generating dictionary $@..."
-	$(ROOTCLINGORCINT) -f $@ -p $(INCLUDES) $^
+	$(ROOTCLINGORCINT) -f $@ -c $(INCLUDES) $^
 
 $(OSOSCAR_LIB): $(OBJS) $(OSOSCAR_DICTO)
 	@$(CXX) -shared $(CXXFLAGS) $^ $(SYSLIB) $(CFLAGS) $(RLIBS) -o $@

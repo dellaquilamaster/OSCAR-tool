@@ -13,6 +13,7 @@ root:
 	$(MAKE) -C OSCARAnalyzer ; 		$(MAKE) -C OSCARAnalyzer install
 	$(MAKE) -C detectors/OSDetector ; 	$(MAKE) -C detectors/OSDetector install
 	$(MAKE) -C detectors/OSOSCAR ; 	        $(MAKE) -C detectors/OSOSCAR install
+	$(MAKE) -C detectors/OSSingleTelescope ;$(MAKE) -C detectors/OSSingleTelescope install
 	$(MAKE) -C OSCARDetectorMap ; 		$(MAKE) -C OSCARDetectorMap install
 	$(MAKE) -C shared ; 			$(MAKE) -C shared install
 	$(MAKE) -C logo ; 			$(MAKE) -C logo install
@@ -25,6 +26,7 @@ install:
 	$(MAKE) -C OSCARAnalyzer install
 	$(MAKE) -C detectors/OSDetector install
 	$(MAKE) -C detectors/OSOSCAR install
+	$(MAKE) -C detectors/OSSingleTelescope install
 	$(MAKE) -C OSCARDetectorMap install
 	$(MAKE) -C shared install
 	$(MAKE) -C logo install
@@ -37,6 +39,7 @@ distclean:
 	$(MAKE) -C OSCARAnalyzer distclean
 	$(MAKE) -C detectors/OSDetector distclean
 	$(MAKE) -C detectors/OSOSCAR distclean
+	$(MAKE) -C detectors/OSSingleTelescope distclean
 	$(MAKE) -C OSCARDetectorMap distclean
 	$(MAKE) -C shared distclean
 	$(MAKE) -C logo distclean
@@ -52,6 +55,7 @@ clean:
 	$(MAKE) -C OSCARAnalyzer  clean
 	$(MAKE) -C detectors/OSDetector  clean
 	$(MAKE) -C detectors/OSOSCAR  clean
+	$(MAKE) -C detectors/OSSingleTelescope  clean
 	$(MAKE) -C OSCARDetectorMap  clean
 	$(MAKE) -C shared  clean
 	$(MAKE) -C logo  clean
@@ -69,6 +73,7 @@ debug:
 	$(MAKE) -C OSCARAnalyzer
 	$(MAKE) -C detectors/OSDetector
 	$(MAKE) -C detectors/OSOSCAR
+	$(MAKE) -C detectors/OSSingleTelescope
 	$(MAKE) -C OSCARDetectorMap
 	$(MAKE) -C shared
 	$(MAKE) -C logo

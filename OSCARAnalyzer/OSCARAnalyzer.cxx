@@ -42,14 +42,14 @@ int OSCARAnalyzer::Init()
 
 //____________________________________________________
 int OSCARAnalyzer::BuildDetectors()
-{
+{ 
   //Build Detectors from mapping file
-  if(LoadRegisteredDetectors(file_daqconfig_name)<=0) {
+  if(LoadRegisteredDetectors(file_mapping_name)<=0) {
     return -1; 
   }
   
   //Assign Modules to registered detectors from mapping file
-  if(LoadRegisteredModules(file_daqconfig_name)<=0) {
+  if(LoadRegisteredModules(file_mapping_name)<=0) {
     return -2; 
   }
   
@@ -58,15 +58,15 @@ int OSCARAnalyzer::BuildDetectors()
     std::string DetectorType((*TheDetector).second->GetType());
     if(DetectorType.compare("OSCAR")==0) {
       OSDetectorMap * new_map = new OSOSCARMap((*TheDetector).second->GetName(), (*TheDetector).second->GetNumDetectors());
-      new_map->LoadMapping(file_daqconfig_name);
+      new_map->LoadMapping(file_mapping_name);
       (*TheDetector).second->SetMapping(new_map);
     } else if(DetectorType.compare("SingleTelescope")==0) {
-//       OSDetectorMap * new_map = new OSSingleTelescopeMap((*TheDetector).second->GetName());
-//       new_map->LoadMapping(file_daqconfig_name);
-//       (*TheDetector).second->SetMapping(new_map);
+      OSDetectorMap * new_map = new OSSingleTelescopeMap((*TheDetector).second->GetName());
+      new_map->LoadMapping(file_mapping_name);
+      (*TheDetector).second->SetMapping(new_map);      
     } else if(DetectorType.compare("SingleDetector")==0) {
 //       OSDetectorMap * new_map = new OSSingleDetectorMap((*TheDetector).second->GetName());
-//       new_map->LoadMapping(file_daqconfig_name);
+//       new_map->LoadMapping(file_mapping_name);
 //       (*TheDetector).second->SetMapping(new_map);
     }
   }
@@ -90,12 +90,13 @@ int OSCARAnalyzer::LoadRegisteredDetectors(const char * file_name)
     std::string LineRead;
     std::getline(FileIn, LineRead);
     std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
-
+    
+    
     if(LineReadCommentLess.empty()) continue;
 
     if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
 
-    if(LineReadCommentLess.find("define ")!=std::string::npos) {
+    if(LineReadCommentLess.find("define ")!=std::string::npos) {      
       NDetectorsDefined+=ParseDefineLine(LineReadCommentLess.c_str());
     }
   }
@@ -108,7 +109,7 @@ int OSCARAnalyzer::LoadRegisteredDetectors(const char * file_name)
 int OSCARAnalyzer::LoadRegisteredModules(const char * file_name)
 {
   std::ifstream FileIn(file_name);
-
+  
   if(!FileIn.is_open()) {
     return -1;
   }
@@ -125,7 +126,7 @@ int OSCARAnalyzer::LoadRegisteredModules(const char * file_name)
 
     if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
 
-    if(LineReadCommentLess.find("assign ")!=std::string::npos) {
+    if(LineReadCommentLess.find("assign ")!=std::string::npos) {      
       NModulesAssigned+=ParseAssignLine(LineReadCommentLess.c_str());
     }
   }
@@ -153,12 +154,15 @@ int OSCARAnalyzer::ParseDefineLine(const char * line_to_parse)
       LineStream>>NumTelescopes;
       OSDetector * new_detector = new OSOSCAR(DetectorName.c_str(),NumTelescopes);
       (*fRegisteredDetectors)[DetectorName]=new_detector;
+      NDetectorsAdded++;
     } else if(DetectorType.compare("SingleTelescope")==0) {
-//       OSDetector * new_detector = new OSSingleTelescope(DetectorName.c_str());
-//       (*fRegisteredDetectors)[DetectorName]=new_detector;
+      OSDetector * new_detector = new OSSingleTelescope(DetectorName.c_str());
+      (*fRegisteredDetectors)[DetectorName]=new_detector;
+      NDetectorsAdded++;
     } else if(DetectorType.compare("SingleDetector")==0) {
 //       OSDetector * new_detector = new OSSingleDetector(DetectorName.c_str());
 //       (*fRegisteredDetectors)[DetectorName]=new_detector;
+      NDetectorsAdded++;
     }
   }
 
@@ -177,7 +181,7 @@ int OSCARAnalyzer::ParseAssignLine(const char * line_to_parse)
     std::string DetectorName;
     LineStream>>DetectorName;
     int ModuleNumber;
-    while(LineStream>>ModuleNumber) {
+    while(LineStream>>ModuleNumber) { 
       (*fRegisteredDetectors)[DetectorName]->AssignModule(ModuleNumber,fRawData[ModuleNumber-1]); //WARNING: the vector fRawData starts from 0 while ModuleNumber starts from 1
       NModulesAdded++;
     }
@@ -218,6 +222,7 @@ void OSCARAnalyzer::MapDetectors()
 {
   for(std::map<std::string, OSDetector *>::iterator TheDetector=fRegisteredDetectors->begin(); TheDetector!=fRegisteredDetectors->end(); TheDetector++) {
     (*TheDetector).second->BuildEvent();
+    (*TheDetector).second->FillMappedData();
   }
 }
 

@@ -37,7 +37,7 @@ public :
   void FillMappedData() override;                  //!Stores mapped data in detector ROOT class to be written on the output tree
 
 private :
-//   OSOSCARCluster * fOSCARMapped;                     //!OSOSCARCluster containing event-by-event mapped data of the entire cluster of OSCAR telescopes (in the trivial case just 1)
+//   OSOSCARCluster * fOSCARMapped;                    //!OSOSCARCluster containing event-by-event mapped data of the entire cluster of OSCAR telescopes (in the trivial case just 1)
   OSOSCARRootEvent * fevt;                         //!RootEvent type of the detector
 
 };

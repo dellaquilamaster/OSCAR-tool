@@ -37,6 +37,12 @@ void OSCARRawDataReader::SetAnalyzer(OSCARAnalyzer * TheAnalyer)
 }
 
 //____________________________________________________
+Int_t ** OSCARRawDataReader::GetData() const
+{
+  return fData;
+}
+
+//____________________________________________________
 int OSCARRawDataReader::InitReader()
 {
   //Configuring input tree

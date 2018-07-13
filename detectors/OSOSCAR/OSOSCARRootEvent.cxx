@@ -69,6 +69,11 @@ OSOSCARData::~OSOSCARData()
 }
 
 //________________________________________________
+OSOSCARRootEvent::OSOSCARRootEvent(int num_tel) :
+fOSCAR(num_tel)
+{}
+
+//________________________________________________
 OSOSCARRootEvent::OSOSCARRootEvent()
 {}
 

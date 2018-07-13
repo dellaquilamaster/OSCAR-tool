@@ -2,8 +2,10 @@
 
 //________________________________________________
 OSOSCAR::OSOSCAR(const char * name, int num_detectors) : OSDetector(name, num_detectors),
-fevt(new OSOSCARRootEvent())
-{}
+fevt(new OSOSCARRootEvent(num_detectors))
+{
+  fType.assign("OSCAR");
+}
 
 //________________________________________________
 OSOSCAR::~OSOSCAR()
@@ -20,6 +22,7 @@ void OSOSCAR::Clear()
 //________________________________________________
 void OSOSCAR::InitTTreeBranch(TTree * TheTree)
 {
+  OSOSCARData::Class()->SetCanSplit(1);
   TheTree->Branch(Form("%s.",GetName()),"OSOSCARData",&(fevt->fOSCAR),32768,2);
 }
 

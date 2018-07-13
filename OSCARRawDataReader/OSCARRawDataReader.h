@@ -19,6 +19,7 @@ public :
   int InitReader();                       //!Called after mapper and input tree are set to initialize input tree branches. Returns -1 if failed to create TTreeReader. -2 failed to retrieve Root input file(s)
   int InitRootInput();                    //!Initialize ROOT TTree and TFile for input, returns the number of files retrieved
   void SetAnalyzer(OSCARAnalyzer *);      //!Called at the beginning of the unpacking process to set the Analyzer
+  Int_t** GetData() const;                //!Get data vector
   void ProcessRawTree();                  //!Executes event-by-event OSCARAnalyzer::MapDetectors() and OSCARAnalyzer::FillMappedEvent()
   void EndProcess();                      //!Called at the end of the mapping process. It calls OSCARAnalyzer::EndAnalysis()
   void PrintSummary() const;              //!Print Mapping summary

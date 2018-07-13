@@ -39,6 +39,7 @@ class OSOSCARRootEvent
 public :  
   OSOSCARData fOSCAR;
   
+  OSOSCARRootEvent(int);
   OSOSCARRootEvent();
   virtual ~OSOSCARRootEvent();
     

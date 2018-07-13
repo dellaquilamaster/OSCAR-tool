@@ -18,7 +18,7 @@ INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
 INCLUDES  += -I$(OSCARSRC)/shared
 INCLUDES  += -I$(OSCARSRC)/logo
 
-RLIBS     := -L$(OSCARLIB) -lOSCARShared -lOSCARLogo -lOSCARRawDataReader -lOSCARAnalyzer -lFAIRelectronics -lOSDetector -lOSCARDetectorMap -lOSOSCAR
+RLIBS     := -L$(OSCARLIB) -lOSCARShared -lOSCARLogo -lOSCARRawDataReader -lOSCARAnalyzer -lFAIRelectronics -lOSDetector -lOSCARDetectorMap -lOSOSCAR -lOSSingleTelescope
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))

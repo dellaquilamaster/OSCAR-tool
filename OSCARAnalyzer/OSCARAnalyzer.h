@@ -8,7 +8,9 @@
 
 #include <OSDetector.h>
 #include <OSOSCAR.h>
+#include <OSSingleTelescope.h>
 #include <OSDetectorMap.h>
+#include <OSSingleTelescopeMap.h>
 #include <OSOSCARMap.h>
 
 #include <OSCARShared.h>

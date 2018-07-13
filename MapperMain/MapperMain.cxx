@@ -44,15 +44,6 @@ int main (int argc, char** argv)
     exit(1);
   }
   
-  //Creation of Data Analyzer
-  OSCARAnalyzer * TheAnalyzer = new OSCARAnalyzer();
-  
-  //Initialization of Data Analyzer
-  if(TheAnalyzer->Init()<0) {
-    printf("Error: Failed to initialize data analyzer.\n");
-    exit(2);
-  }
-  
   //Creation of Data Reader
   OSCARRawDataReader * TheReader = new OSCARRawDataReader();
   
@@ -62,6 +53,18 @@ int main (int argc, char** argv)
     exit(3);
   }
   
+  //Creation of Data Analyzer
+  OSCARAnalyzer * TheAnalyzer = new OSCARAnalyzer();
+  
+  //Register Input Data to the Analyzer
+  TheAnalyzer->RegisterElectronics(TheReader->GetData());
+  
+  //Initialization of Data Analyzer
+  if(TheAnalyzer->Init()<0) {
+    printf("Error: Failed to initialize data analyzer.\n");
+    exit(2);
+  }
+    
   //Registering Data Analyzer
   TheReader->SetAnalyzer(TheAnalyzer);
   
@@ -77,54 +80,3 @@ int main (int argc, char** argv)
     
   return 0;
 }
-
-
-  /*
-  //Creation of Data Reader
-  OscarAnalysisVector DataReader;
-  //Initialization of Input Tree
-  if(DataReader.InitTree(Form("%s%s.root",file_unpacker_output_path,RunToUnpackName))<0) {
-    printf("Error: Failed to open FAIRUNpacker root tree.\n");
-    exit(2);
-  }
-  
-  //Pedestal suppression
-  //DataReader.EnablePedSuppression();
-  //Reader Initialization
-  if(!DataReader.Init(parameter_file,pedestal_file,DataChain)) {
-    printf("Error: Failed to initialize data reader.\n");
-    exit(3);
-  }
-  
-  //Reading Raw data
-  DataReader.FillEvtBuffer();
-  Events=DataReader.GetEvtBuffer();
-  printf("Buffer Filled --> %d events stored\n",Events.size());
-  
-  //Initialization of the Analyzer
-  TRootDefine RootResources;
-  if(!RootResources.Open(Form("%s%s.root",file_mapper_output_path,RunToUnpackName))) {
-    exit(4);
-  }
-  OGeometry GeometryModule;
-  if(!GeometryModule.Init(geometry_file)){
-    exit(4);
-  }
-  OIdentification IdModule;
-  if(!IdModule.Init(dee_file)){
-    exit(4);
-  }
-  OCalibration CalibModule;
-  if(!CalibModule.Init(calib_file)){
-    exit(4); 
-  }
-  
-  //Construction of the Event Analyzer
-  OAnalyzer OscarAnalysis(Events,&RootResources,&GeometryModule,&IdModule,&CalibModule);
-  
-  //Run Data Analysis
-  OscarAnalysis.RunDataAnalysis();
-  
-  RootResources.Close();
-  */
-  
