@@ -8,7 +8,7 @@
  * This program is a new version of the previous FAIRUNPACKER which has been included in a more complex and 
  * versatile analysis tool to handle OSCAR experiments: OSCAR-tool.
  * 
- * USAGE: OSCARUnpacker --run=start_run-end_run --run=run1,run2,run3,... -exclude=bad_run1,bad_run2,...
+ * USAGE: FAIRUnpacker.exe --run=num_run
  * 
  * 
  * **********************************************************************************************************/
@@ -48,6 +48,7 @@
 #include <FAIRRootWriter.h>
 #include <EventBuffer.h>
 #include <Monitor.h>
+#include <UnpackerPassArgument.h>
 
 #include <OSCARLogo.h>
 #include <OSCARShared.h>
@@ -57,63 +58,59 @@ int main (int argc, char** argv)
   PrintOSCARUnpackerLogo();
   
   /*variabili utili***********************************************************************************/
-  char file_config_name[]="configuration.conf";
-  char file_output_name[]="output.root";
   char file_data_name[100];
-  char run_name[100];
-  int  numero_runs=argc-1;
   int  file_code[1000]; /*array che contiene i codici dei files aperti per la lettura binaria*/
   /***************************************************************************************************/
+  
+  //Retrieving run to unpack
+  const char * RunToUnpackName = RetrieveRunName(argc,argv);
+  if(RunToUnpackName==0) {
+    printf("Error: Invalid run number or path.\n");
+    exit(1);
+  }
   
   //Create event manager
   gEventManager = new EventBuffer();
   
   //Creation of a buffer vector
   gBufferVector = new std::vector<unsigned int>;
-  gStartEvent = new std::vector<unsigned int>;;
+  gStartEvent = new std::vector<unsigned int>;
   
   /*get configuration*/
-  gLayout = new configurator(file_config_name);
+  gLayout = new configurator(file_daqconfig_name);
   
   /*costruzione della struttura del tree*/
   FAIRRootWriter * RootTools = new FAIRRootWriter();
-  RootTools->DefineTree(gLayout, file_output_name);
+  RootTools->DefineTree(gLayout, Form("%s%s.root",file_unpacker_output_path,RunToUnpackName));
   
   /*Costruzione del monitor eventi*/
   Monitor EvtMonitor;
   
-  /*ciclo esterno su tutte le cartelle di run*********************************************************/
-  for(int curr_run=0; curr_run<numero_runs; curr_run++)
+  printf("Unpacking run %s\n",RunToUnpackName);
+  /*Inizializzazione del monitor*/
+  EvtMonitor.Init();
+  //Loop on each dat file
+  for(int curr_file=0; ; curr_file++)
   {
-    strncpy(run_name,strrchr(argv[curr_run+1],'/')+1,13);
-    /*ciclo principale di lettura su tutti i files del run*/
-    printf("Unpacking run %s\n",run_name);
-    /*Inizializzazione del monitor*/
-    EvtMonitor.Init();
-    for(int curr_file=0; ; curr_file++)
+    /*apertura file*/
+    sprintf(file_data_name,"%s%s/%s_%06d.dat",file_raw_output_path,RunToUnpackName,RunToUnpackName,curr_file+1);
+        
+    if ((file_code[curr_file]=open(file_data_name,O_RDONLY))==-1) break;
+    printf("Unpacking file %s\n",file_data_name);      
+    
+    /*Inizializzazione del buffer di eventi*/
+    gEventManager->InitBuffer(file_code[curr_file]);
+    /*Riempimento del buffer*/
+    unsigned int NumEvents = gEventManager->FillBuffer();
+    
+    /*loop su tutti gli eventi*/
+    for(unsigned int EvtCounter = 0; EvtCounter<NumEvents; EvtCounter++)
     {
-      /*apertura file*/
-      sprintf(file_data_name,"%s/%s_%06d.dat",argv[curr_run+1],run_name,curr_file+1);
-            
-      if ((file_code[curr_file]=open(file_data_name,O_RDONLY))==-1) break;
-      printf("Unpacking file %s\n",file_data_name);      
-      
-      /*Inizializzazione del buffer di eventi*/
-      gEventManager->InitBuffer(file_code[curr_file]);
-      /*Riempimento del buffer*/
-      unsigned int NumEvents = gEventManager->FillBuffer();
-      
-      /*loop su tutti gli eventi*/
-      for(unsigned int EvtCounter = 0; EvtCounter<NumEvents; EvtCounter++)
-      {
-        if(EvtMonitor.EndOfEvent(RootTools->ReadEvent(EvtCounter, gLayout))==4)
-          break;
-      }
+      if(EvtMonitor.EndOfEvent(RootTools->ReadEvent(EvtCounter, gLayout))==4)
+        break;
     }
-    printf("Run %s completed.\n", run_name);
-    EvtMonitor.EndOfRun();
-  }
-  /*fine del ciclo principale*************************************************************************/
+  } //end of the main loop
+  EvtMonitor.EndOfRun();
   
   /*scrittura del tree su file*/
   RootTools->WriteTree();

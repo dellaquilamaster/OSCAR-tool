@@ -9,6 +9,7 @@ INCLUDES  += -I$(OSCARSRC)/FAIRRootWriter
 INCLUDES  += -I$(OSCARSRC)/FAIRBufferReader
 INCLUDES  += -I$(OSCARSRC)/FAIRelectronics
 INCLUDES  += -I$(OSCARSRC)/shared
+INCLUDES  += -I$(OSCARSRC)/define
 
 RLIBS     := -L$(OSCARLIB)
 

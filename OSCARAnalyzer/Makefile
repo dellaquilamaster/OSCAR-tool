@@ -1,0 +1,50 @@
+CFLAGS    :=`root-config --cflags --libs`
+
+DllSuf    := so
+SrcSuf    := cxx
+ObjSuf    := o
+
+INCLUDES  := -I$(OSCARSRC)/
+INCLUDES  += -I$(OSCARSRC)/OSCARAnalyzer
+INCLUDES  += -I$(OSCARSRC)/detectors/OSDetector
+INCLUDES  += -I$(OSCARSRC)/detectors/OSOSCAR
+INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
+INCLUDES  += -I$(OSCARSRC)/shared
+INCLUDES  += -I$(OSCARSRC)/define
+
+RLIBS     := -L$(OSCARLIB)
+
+CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+
+OSCARANALYZER_LIB := libOSCARAnalyzer.$(DllSuf)
+SRCS = $(wildcard *.$(SrcSuf))
+OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
+
+.$(SrcSuf).$(ObjSuf):
+	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
+	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
+
+all: $(OSCARANALYZER_LIB)
+
+.SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
+
+$(OSCARANALYZER_LIB): $(OBJS)
+	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
+	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
+
+install:
+	@cp $(OSCARANALYZER_LIB) $(OSCARLIB)/.
+
+.PHONY: distclean
+distclean:
+	@rm -f $(OSCARANALYZER_LIB)
+	@rm -f $(OSCARLIB)/$(OSCARANALYZER_LIB)
+
+.PHONY: clean
+clean:
+	@$(RM) -f $(LIB) $(OBJS)
+	@$(RM) -f *.expand
+
+.PHONY: lint
+lint:
+	$(LINT) $(INC_SRCH_PATH) $(SRCS)

@@ -1,7 +1,7 @@
 #For questions, talk to Daniele Dell'Aquila (dellaquila.daniele@gmail.com)
 
 ##################################################################
-export ROOTCLINGORCINT='rootcling'
+export ROOTCLINGORCINT='rootcint'
 ##################################################################
 
 #determining OSCAR path from config/OSCAR.conf
