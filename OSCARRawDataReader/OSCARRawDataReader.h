@@ -2,6 +2,7 @@
 #define OSCARRAWDATAREADER_H
 
 #include <iostream>
+#include <iomanip>
 #include <TTree.h>
 #include <TChain.h>
 #include <TFile.h>
