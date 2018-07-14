@@ -12,13 +12,16 @@ fCalibrationLoaded(false),
 fGeometryLoaded(false)
 {
   //TEMPORARY, Calibration Loading
-  if(file_oscargeometry_name[0]!='\0' && fOscarGeometry->Init(file_oscargeometry_name)>0) {
+  if(gRunInfo->GetOSCARGeometryFileName()[0]!='\0' && fOscarGeometry->Init(gRunInfo->GetOSCARGeometryFileName())>0) {
+    printf("OSOSCARAnalyzer> Loaded OSCAR Geometry from file %s\n", gRunInfo->GetOSCARGeometryFileName());
     fGeometryLoaded=true;
   }
-  if(file_oscarcalibration_name[0]!='\0' && fOscarCalibrator->Init(file_oscarcalibration_name)>0) {
+  if(gRunInfo->GetOSCARCalibrationFileName()[0]!='\0' && fOscarCalibrator->Init(gRunInfo->GetOSCARCalibrationFileName())>0) {
+    printf("OSOSCARAnalyzer> Loaded OSCAR Calibration from file %s\n", gRunInfo->GetOSCARCalibrationFileName());
     fCalibrationLoaded=true;
   }
-  if(file_oscaridentification_name[0]!='\0' && fOscarIdentificator->Init(file_oscaridentification_name)>0) {
+  if(gRunInfo->GetOSCARIdentificationFileName()[0]!='\0' && fOscarIdentificator->Init(gRunInfo->GetOSCARIdentificationFileName())>0) {
+    printf("OSOSCARAnalyzer> Loaded OSCAR Identification from file %s\n", gRunInfo->GetOSCARIdentificationFileName());
     fIdentificationLoaded=true;
   }
 }

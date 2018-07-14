@@ -35,7 +35,7 @@ int OSCARAnalyzer::Init()
     printf("OSCARAnalyzer> Error: Failed to create output tree.\n");
     return -2;
   }
-  printf("OSCARAnalyzer> Data Analyzer correctly initialized, created file: %s\n", Form("%s%s.root",file_mapper_output_path,run_to_analyze));
+  printf("OSCARAnalyzer> Data Analyzer correctly initialized, created file: %s\n", Form("%s%s.root",gRunInfo->GetOSCARMapperDataPath(),gRunInfo->GetRunNumber()));
   
   return 0;
 }
@@ -44,12 +44,12 @@ int OSCARAnalyzer::Init()
 int OSCARAnalyzer::BuildDetectors()
 { 
   //Build Detectors from mapping file
-  if(LoadRegisteredDetectors(file_mapping_name)<=0) {
+  if(LoadRegisteredDetectors(gRunInfo->GetMappingFileName())<=0) {
     return -1; 
   }
   
   //Assign Modules to registered detectors from mapping file
-  if(LoadRegisteredModules(file_mapping_name)<=0) {
+  if(LoadRegisteredModules(gRunInfo->GetMappingFileName())<=0) {
     return -2; 
   }
   
@@ -58,15 +58,15 @@ int OSCARAnalyzer::BuildDetectors()
     std::string DetectorType((*TheDetector).second->GetType());
     if(DetectorType.compare("OSCAR")==0) {
       OSDetectorMap * new_map = new OSOSCARMap((*TheDetector).second->GetName(), (*TheDetector).second->GetNumDetectors());
-      new_map->LoadMapping(file_mapping_name);
+      new_map->LoadMapping(gRunInfo->GetMappingFileName());
       (*TheDetector).second->SetMapping(new_map);
     } else if(DetectorType.compare("SingleTelescope")==0) {
       OSDetectorMap * new_map = new OSSingleTelescopeMap((*TheDetector).second->GetName());
-      new_map->LoadMapping(file_mapping_name);
+      new_map->LoadMapping(gRunInfo->GetMappingFileName());
       (*TheDetector).second->SetMapping(new_map);      
     } else if(DetectorType.compare("SingleDetector")==0) {
 //       OSDetectorMap * new_map = new OSSingleDetectorMap((*TheDetector).second->GetName());
-//       new_map->LoadMapping(file_mapping_name);
+//       new_map->LoadMapping(gRunInfo->GetMappingFileName());
 //       (*TheDetector).second->SetMapping(new_map);
     }
   }
@@ -194,13 +194,13 @@ int OSCARAnalyzer::ParseAssignLine(const char * line_to_parse)
 int OSCARAnalyzer::InitRootOutput()
 {
   //Initializing Output File
-  fFileOut = new TFile(Form("%s%s.root",file_mapper_output_path,run_to_analyze),"RECREATE");
+  fFileOut = new TFile(Form("%s%s.root",gRunInfo->GetOSCARMapperDataPath(),gRunInfo->GetRunNumber()),"RECREATE");
   if(fFileOut->IsZombie()) {
     return -1;
   }
   fFileOut->SetCompressionLevel(1);
   //Initializing Output Tree
-  fOutputTree = new TTree(experiment_name,experiment_title);
+  fOutputTree = new TTree(gRunInfo->GetExperimentName(),gRunInfo->GetExperimentTitle());
   fOutputTree->SetAutoSave(50000000);
   
   //Build individual detector branches

@@ -9,7 +9,7 @@ INCLUDES  += -I$(OSCARSRC)/logo
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSCARLOGO_LIB := libOSCARLogo.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

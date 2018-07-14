@@ -30,9 +30,6 @@ Int_t OSOSCARIdentification::Init(const char * cut_file)
     printf("OSCAR Identification> Error: Failed to open identification file\n"); 
     return 0;
   }
-  else {
-    printf("OSCAR Identification> Opened ROOT file %s\n",cut_file);
-  }
   
   /* Possibili tipi di particelle identificabili*/
   PhysParticle[0].Z=1;

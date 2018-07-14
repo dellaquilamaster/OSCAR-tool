@@ -52,7 +52,6 @@ int OSOSCARCalibration::Init(const char * file_calib)
       thickness_pad[pid%100-1] =thickness; /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
     }
   }
-  printf("OSCAR Calibrations> Read %d lines from file %s\n",i,file_calib);
   /***********************************************************************************************************/
   
   return 1;

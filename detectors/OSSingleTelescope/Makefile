@@ -14,7 +14,7 @@ INCLUDES  += -I$(OSCARSRC)/shared
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSSINGLETELESCOPE_DICT  := OSSingleTelescopeDict.$(SrcSuf)
 OSSINGLETELESCOPE_DICTH := $(OSSINGLETELESCOPE_DICT:.$(SrcSuf)=.h)

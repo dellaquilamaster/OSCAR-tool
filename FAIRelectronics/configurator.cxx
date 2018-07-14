@@ -1,6 +1,6 @@
 #include "configurator.h"
 
-configurator::configurator (char * file_config_name)
+configurator::configurator (const char * file_config_name)
 {
   FILE * file_config;
   file_config=fopen(file_config_name,"r");

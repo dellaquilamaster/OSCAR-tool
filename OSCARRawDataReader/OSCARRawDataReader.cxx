@@ -2,8 +2,8 @@
 
 //____________________________________________________
 OSCARRawDataReader::OSCARRawDataReader() :
-fFAIRDAQConfiguration(new configurator(file_daqconfig_name)),
-fInputTree(new TChain(experiment_name)),
+fFAIRDAQConfiguration(new configurator(gRunInfo->GetDAQConfigFileName())),
+fInputTree(new TChain(gRunInfo->GetExperimentName())),
 fAnalyzer(0),
 fNumEvents(0),
 fData(new Int_t *[fFAIRDAQConfiguration->get_number_modules()])
@@ -27,7 +27,7 @@ OSCARRawDataReader::~OSCARRawDataReader()
 //____________________________________________________
 int OSCARRawDataReader::InitRootInput()
 {
-  return fInputTree->Add(Form("%s%s*.root",file_unpacker_output_path,run_to_analyze));
+  return fInputTree->Add(Form("%s%s*.root",gRunInfo->GetFAIRUnpackerDataPath(),gRunInfo->GetRunNumber()));
 }
 
 //____________________________________________________

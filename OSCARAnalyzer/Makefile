@@ -11,12 +11,13 @@ INCLUDES  += -I$(OSCARSRC)/detectors/OSOSCAR
 INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleTelescope
 INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleDetector
 INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 INCLUDES  += -I$(OSCARSRC)/define
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSCARANALYZER_LIB := libOSCARAnalyzer.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

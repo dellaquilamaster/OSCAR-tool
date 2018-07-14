@@ -8,6 +8,7 @@
 #include <TFile.h>
 
 #include <OSCARAnalyzer.h>
+#include <OSRunInfo.h>
 
 #include <configurator.h>
 

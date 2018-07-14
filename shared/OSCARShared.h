@@ -5,6 +5,7 @@ class configurator;
 class FAIRRootWriter;
 class EventBuffer;
 class Monitor;
+class OSRunInfo;
 
 #include <vector>
 
@@ -15,22 +16,12 @@ extern std::vector<unsigned int>  *gStartEvent; /*vettore contenente la word di 
 extern EventBuffer                *gEventManager;
 extern configurator               *gLayout;
 
+extern OSRunInfo                  *gRunInfo;
+
 //OSCAR Constants
 extern const int NUM_STRIPS_OSCAR;
 extern const int NUM_PADS_OSCAR;
 extern const int NUM_MAX_PARTICLES_PER_OSCAR;
-
-extern char file_raw_output_path[];   
-extern char file_unpacker_output_path[];   
-extern char file_mapper_output_path[];    
-extern char file_daqconfig_name[];
-extern char file_mapping_name[];
-extern char file_oscargeometry_name[];
-extern char file_oscaridentification_name[];
-extern char file_oscarcalibration_name[];
-extern char experiment_name[];
-extern char experiment_title[];
-extern const char *run_to_analyze;
 
 
 #endif

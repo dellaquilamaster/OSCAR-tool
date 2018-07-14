@@ -50,7 +50,6 @@ int OSOSCARGeometry::Init(const char * nome_geom_file)
     }
   }
   geometry_file.close();
-  printf("OSCAR Geometry> Read %d lines from %s file\n", n_reads,nome_geom_file);
   return n_reads;
 }
 

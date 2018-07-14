@@ -5,23 +5,13 @@ SrcSuf    := cxx
 ObjSuf    := o
 
 INCLUDES  := -I$(OSCARSRC)/
-INCLUDES  += -I$(OSCARSRC)/OSCARRawDataReader
-INCLUDES  += -I$(OSCARSRC)/OSCARAnalyzer
-INCLUDES  += -I$(OSCARSRC)/FAIRelectronics
-INCLUDES  += -I$(OSCARSRC)/detectors/OSDetector
-INCLUDES  += -I$(OSCARSRC)/detectors/OSOSCAR
-INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleTelescope
-INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleDetector
-INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
 INCLUDES  += -I$(OSCARSRC)/OSRunInfo
-INCLUDES  += -I$(OSCARSRC)/shared
-INCLUDES  += -I$(OSCARSRC)/define
 
 RLIBS     := -L$(OSCARLIB)
 
 CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
-OSCARRAWDATAREADER_LIB := libOSCARRawDataReader.$(DllSuf)
+OSRUNINFO_LIB := libOSRunInfo.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
@@ -29,21 +19,21 @@ OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)
 	@echo "$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)"
 
-all: $(OSCARRAWDATAREADER_LIB)
+all: $(OSRUNINFO_LIB)
 
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
-$(OSCARRAWDATAREADER_LIB): $(OBJS)
+$(OSRUNINFO_LIB): $(OBJS)
 	@$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)
 	@echo "$(CXX) $(CXXFLAGS) -shared -o $@ $^ $(CFLAGS) $(RLIBS)"
 
 install:
-	@cp $(OSCARRAWDATAREADER_LIB) $(OSCARLIB)/.
+	@cp $(OSRUNINFO_LIB) $(OSCARLIB)/.
 
 .PHONY: distclean
 distclean:
-	@rm -f $(OSCARRAWDATAREADER_LIB)
-	@rm -f $(OSCARLIB)/$(OSCARRAWDATAREADER_LIB)
+	@rm -f $(OSRUNINFO_LIB)
+	@rm -f $(OSCARLIB)/$(OSRUNINFO_LIB)
 
 .PHONY: clean
 clean:

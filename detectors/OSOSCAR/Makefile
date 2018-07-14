@@ -10,11 +10,12 @@ INCLUDES  := -I$(OSCARSRC)/
 INCLUDES  += -I$(OSCARSRC)/detectors/OSDetector
 INCLUDES  += -I$(OSCARSRC)/detectors/OSOSCAR
 INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSOSCAR_DICT  := OSOSCARDict.$(SrcSuf)
 OSOSCAR_DICTH := $(OSOSCAR_DICT:.$(SrcSuf)=.h)

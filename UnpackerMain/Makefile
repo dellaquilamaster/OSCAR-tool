@@ -9,16 +9,17 @@ INCLUDES  += -I$(OSCARSRC)/UnpackerMain
 INCLUDES  += -I$(OSCARSRC)/FAIRBufferReader
 INCLUDES  += -I$(OSCARSRC)/FAIRelectronics
 INCLUDES  += -I$(OSCARSRC)/FAIRRootWriter
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 INCLUDES  += -I$(OSCARSRC)/logo
 INCLUDES  += -I$(OSCARSRC)/define
 
-RLIBS     := -L$(OSCARLIB) -lFAIRBufferReader -lFAIRelectronics -lFAIRRootWriter -lOSCARShared -lOSCARLogo
+RLIBS     := -L$(OSCARLIB) -lFAIRBufferReader -lFAIRelectronics -lFAIRRootWriter -lOSCARShared -lOSCARLogo -lOSRunInfo
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 .$(SrcSuf).$(ObjSuf):
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)

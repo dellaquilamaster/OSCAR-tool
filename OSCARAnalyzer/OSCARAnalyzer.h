@@ -12,6 +12,7 @@
 #include <OSDetectorMap.h>
 #include <OSSingleTelescopeMap.h>
 #include <OSOSCARMap.h>
+#include <OSRunInfo.h>
 
 #include <OSCARShared.h>
 

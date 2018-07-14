@@ -19,7 +19,7 @@ void FAIRRootWriter::DefineTree(configurator * pConfig, const char * file_name)
   pfout = new TFile(file_name,"RECREATE");
   pfout->SetCompressionLevel(1);
   /*creation of branches*/
-  pTreeOut=new TTree(experiment_name,experiment_title);
+  pTreeOut=new TTree(gRunInfo->GetExperimentName(),gRunInfo->GetExperimentTitle());
   pTreeOut->SetAutoSave(50000000);
   for(unsigned int i=0; i<ModsNumber; i++)
   {

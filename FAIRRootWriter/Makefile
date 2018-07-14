@@ -8,12 +8,13 @@ INCLUDES  := -I$(OSCARSRC)/
 INCLUDES  += -I$(OSCARSRC)/FAIRRootWriter
 INCLUDES  += -I$(OSCARSRC)/FAIRBufferReader
 INCLUDES  += -I$(OSCARSRC)/FAIRelectronics
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 INCLUDES  += -I$(OSCARSRC)/define
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSFAIRROOTWRITER_LIB := libFAIRRootWriter.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

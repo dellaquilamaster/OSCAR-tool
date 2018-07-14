@@ -10,7 +10,7 @@
 class configurator
 {
 public:
-  configurator(char *);
+  configurator(const char *);
   ~configurator();
   
   unsigned int get_number_modules  ();

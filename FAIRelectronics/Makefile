@@ -9,7 +9,7 @@ INCLUDES  += -I$(OSCARSRC)/FAIRelectronics
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSFAIRELECTRONICS_LIB := libFAIRelectronics.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

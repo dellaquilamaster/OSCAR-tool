@@ -9,6 +9,7 @@
 #include <OSOSCARGeometry.h>
 #include <OSOSCARPhysicalParticle.h>
 #include <OSOSCARTelescope.h>
+#include <OSRunInfo.h>
 
 #include <OSCARShared.h>
 

@@ -15,33 +15,32 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <TTree.h>
-#include <TH2.h>
-#include <TFile.h>
 
 #include <OSCARRawDataReader.h>
 #include <OSCARAnalyzer.h>
-
-// #include <TRootEvent.h>
-// #include <OAnalyzer.h>
-// #include <OCalibration.h>
-// #include <OGeometry.h>
-
 #include <MapperPassArgument.h>
+#include <OSRunInfo.h>
+
 #include <OSCARLogo.h>
 #include <OSCARShared.h>
 
 int main (int argc, char** argv)
 {
+  //OSCARMapper Welcome Screen Logo
   PrintOSCARUnpackerLogo();
   
   //Retrieving run to unpack
   const char * RunToUnpackName = RetrieveRunName(argc,argv);
-  //TEMPORARY
-  run_to_analyze=RunToUnpackName;
   if(RunToUnpackName==0) {
     printf("Error: Invalid run number or path.\n");
     exit(1);
+  }
+  
+  //Configuring Experimental Run
+  gRunInfo = new OSRunInfo();
+  if(gRunInfo->LoadRunConfiguration(RunToUnpackName,"config/OSCAR.conf")<=0) {
+    printf("Error: Failed to retrieve run configuration\n");
+    exit(-1);
   }
   
   //Creation of Data Reader

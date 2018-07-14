@@ -11,6 +11,7 @@
 #include <EventBuffer.h>
 #include <configurator.h>
 #include <mask.h>
+#include <OSRunInfo.h>
 
 #include <OSCARDef.h>
 #include <OSCARShared.h>

@@ -9,7 +9,7 @@ INCLUDES  := -I$(OSCARSRC)/shared
 
 RLIBS     := -L$(OSCARLIB)
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 OSCARSHARED_LIB := libOSCARShared.$(DllSuf)
 SRCS = $(wildcard *.$(SrcSuf))

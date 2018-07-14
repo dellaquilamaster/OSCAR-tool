@@ -25,7 +25,8 @@ int TestParity(unsigned int WordToCheck)
 }
 
 EventBuffer::EventBuffer() :
-FileLength(0)
+FileLength(0),
+FileBuffer(0)
 {}
 
 EventBuffer::~EventBuffer()
@@ -115,6 +116,7 @@ void EventBuffer::Clear()
 {
   if(FileBuffer!=(unsigned char *)NULL)
     delete[] FileBuffer;
+  
   FileLength=0;
   gStartEvent->clear();
   gBufferVector->clear();

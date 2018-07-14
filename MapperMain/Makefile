@@ -15,15 +15,16 @@ INCLUDES  += -I$(OSCARSRC)/detectors/OSOSCAR
 INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleDetector
 INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleTelescope
 INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 INCLUDES  += -I$(OSCARSRC)/logo
 
-RLIBS     := -L$(OSCARLIB) -lOSCARShared -lOSCARLogo -lOSCARRawDataReader -lOSCARAnalyzer -lFAIRelectronics -lOSDetector -lOSCARDetectorMap -lOSOSCAR -lOSSingleTelescope
+RLIBS     := -L$(OSCARLIB) -lOSCARShared -lOSCARLogo -lOSCARRawDataReader -lOSCARAnalyzer -lFAIRelectronics -lOSDetector -lOSCARDetectorMap -lOSOSCAR -lOSSingleTelescope -lOSRunInfo
 
 SRCS = $(wildcard *.$(SrcSuf))
 OBJS = $(patsubst %.$(SrcSuf), %.$(ObjSuf), $(SRCS))
 
-CXXFLAGS  += $(INCLUDES) -std=c++11 -fPIC -O3 -Wall -Wpedantic
+CXXFLAGS  += $(INCLUDES) -fPIC -O3 -Wall -Wpedantic -std=c++11 
 
 .$(SrcSuf).$(ObjSuf):
 	@$(CXX) $(CXXFLAGS) -c $< $(SYSLIB) $(CFLAGS)

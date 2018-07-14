@@ -49,6 +49,7 @@
 #include <EventBuffer.h>
 #include <Monitor.h>
 #include <UnpackerPassArgument.h>
+#include <OSRunInfo.h>
 
 #include <OSCARLogo.h>
 #include <OSCARShared.h>
@@ -58,7 +59,6 @@ int main (int argc, char** argv)
   PrintOSCARUnpackerLogo();
   
   /*variabili utili***********************************************************************************/
-  char file_data_name[100];
   int  file_code[1000]; /*array che contiene i codici dei files aperti per la lettura binaria*/
   /***************************************************************************************************/
   
@@ -69,37 +69,44 @@ int main (int argc, char** argv)
     exit(1);
   }
   
+  //Configuring Experimental Run
+  gRunInfo = new OSRunInfo();
+  if(gRunInfo->LoadRunConfiguration(RunToUnpackName,"config/OSCAR.conf")<=0) {
+    printf("Error: Failed to retrieve run configuration\n");
+    exit(-1);
+  }
+    
   //Create event manager
   gEventManager = new EventBuffer();
   
   //Creation of a buffer vector
   gBufferVector = new std::vector<unsigned int>;
   gStartEvent = new std::vector<unsigned int>;
-  
+    
   /*get configuration*/
-  gLayout = new configurator(file_daqconfig_name);
+  gLayout = new configurator(gRunInfo->GetDAQConfigFileName());
   
   /*costruzione della struttura del tree*/
   FAIRRootWriter * RootTools = new FAIRRootWriter();
-  RootTools->DefineTree(gLayout, Form("%s%s.root",file_unpacker_output_path,RunToUnpackName));
+  RootTools->DefineTree(gLayout, Form("%s%s.root",gRunInfo->GetFAIRUnpackerDataPath(),gRunInfo->GetRunNumber()));
   
   /*Costruzione del monitor eventi*/
   Monitor EvtMonitor;
   
-  printf("Unpacking run %s\n",RunToUnpackName);
+  printf("Unpacking run %s\n",gRunInfo->GetRunNumber());
   /*Inizializzazione del monitor*/
   EvtMonitor.Init();
   //Loop on each dat file
   for(int curr_file=0; ; curr_file++)
   {
-    /*apertura file*/
-    sprintf(file_data_name,"%s%s/%s_%06d.dat",file_raw_output_path,RunToUnpackName,RunToUnpackName,curr_file+1);
-        
+    /*apertura file*/  
+    const char * file_data_name=Form("%s%s/%s_%06d.dat",gRunInfo->GetRawDataPath(),gRunInfo->GetRunNumber(),gRunInfo->GetRunNumber(),curr_file+1);
     if ((file_code[curr_file]=open(file_data_name,O_RDONLY))==-1) break;
     printf("Unpacking file %s\n",file_data_name);      
     
     /*Inizializzazione del buffer di eventi*/
     gEventManager->InitBuffer(file_code[curr_file]);
+    
     /*Riempimento del buffer*/
     unsigned int NumEvents = gEventManager->FillBuffer();
     
