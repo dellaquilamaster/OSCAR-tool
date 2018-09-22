@@ -11,7 +11,7 @@ configurator::configurator (const char * file_config_name)
   /* leggo il numero di moduli */
   fscanf(file_config,"%s",temp_string);
   modules_number=atoi(temp_string);
-  
+    
   p_channel_number= new unsigned int[modules_number];
   pp_mask_vector  = new mask*[modules_number];
   /* ciclo su tutti i moduli per riempire maschere e numeri canali */

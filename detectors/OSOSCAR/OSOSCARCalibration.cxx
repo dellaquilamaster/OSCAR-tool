@@ -12,12 +12,12 @@ fPadSlope(new double*[fNumTelescopes]),
 fStripThickness(new double*[fNumTelescopes]),
 fPadThickness(new double*[fNumTelescopes])
 {
-  for(int i=0; i<fNumStrips; i++) {
+  for(int i=0; i<fNumTelescopes; i++) {
     fStripIntercept[i]=(new double[fNumStrips]);
     fStripSlope[i]=(new double[fNumStrips]);
     fStripThickness[i]=(new double[fNumStrips]);
   }
-  for(int i=0; i<fNumPads; i++) {
+  for(int i=0; i<fNumTelescopes; i++) {
     fPadIntercept[i]=(new double[fNumPads]);
     fPadSlope[i]=(new double[fNumPads]);
     fPadThickness[i]=(new double[fNumPads]);
@@ -26,12 +26,12 @@ fPadThickness(new double*[fNumTelescopes])
 
 OSOSCARCalibration::~OSOSCARCalibration()
 {
-  for(int i=0; i<fNumStrips; i++) {
+  for(int i=0; i<fNumTelescopes; i++) {
     delete [] fStripIntercept[i];
     delete [] fStripSlope[i];
     delete [] fStripThickness[i];
   }
-  for(int i=0; i<fNumPads; i++) {
+  for(int i=0; i<fNumTelescopes; i++) {
     delete [] fPadIntercept[i];
     delete [] fPadSlope[i];
     delete [] fPadThickness[i];
@@ -58,7 +58,7 @@ int OSOSCARCalibration::Init(const char * file_calib)
     if(LineReadCommentLess.empty()) continue;
     if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
     
-    std::istringstream LineStream(LineRead);
+    std::istringstream LineStream(LineReadCommentLess);
     
     std::string Det;
     double b_coeff;

@@ -26,7 +26,7 @@ define detector SingleTelescope "Tel0"
 define detector SingleTelescope "Tel1"
 
 ** assign modules to detectors
-assign module OSCAR 3
+assign module OSCAR 3 4
 assign module Tel0 2
 assign module Tel1 2
 
@@ -63,6 +63,38 @@ map OSCAR PADENERGY telescope="0"  detector="13"  module="3"  channel="28"
 map OSCAR PADENERGY telescope="0"  detector="14"  module="3"  channel="29"
 map OSCAR PADENERGY telescope="0"  detector="15"  module="3"  channel="30"
 map OSCAR PADENERGY telescope="0"  detector="16"  module="3"  channel="31"
+map OSCAR STRIPTIME telescope="0"  detector="1"   module="4"  channel="0"
+map OSCAR STRIPTIME telescope="0"  detector="2"   module="4"  channel="1"
+map OSCAR STRIPTIME telescope="0"  detector="3"   module="4"  channel="2"
+map OSCAR STRIPTIME telescope="0"  detector="4"   module="4"  channel="3"
+map OSCAR STRIPTIME telescope="0"  detector="5"   module="4"  channel="4"
+map OSCAR STRIPTIME telescope="0"  detector="6"   module="4"  channel="5"
+map OSCAR STRIPTIME telescope="0"  detector="7"   module="4"  channel="6"
+map OSCAR STRIPTIME telescope="0"  detector="8"   module="4"  channel="7"
+map OSCAR STRIPTIME telescope="0"  detector="9"   module="4"  channel="8"
+map OSCAR STRIPTIME telescope="0"  detector="10"  module="4"  channel="9"
+map OSCAR STRIPTIME telescope="0"  detector="11"  module="4"  channel="10"
+map OSCAR STRIPTIME telescope="0"  detector="12"  module="4"  channel="11"
+map OSCAR STRIPTIME telescope="0"  detector="13"  module="4"  channel="12"
+map OSCAR STRIPTIME telescope="0"  detector="14"  module="4"  channel="13"
+map OSCAR STRIPTIME telescope="0"  detector="15"  module="4"  channel="14"
+map OSCAR STRIPTIME telescope="0"  detector="16"  module="4"  channel="15"
+map OSCAR PADTIME telescope="0"  detector="1"   module="4"  channel="16"
+map OSCAR PADTIME telescope="0"  detector="2"   module="4"  channel="17"
+map OSCAR PADTIME telescope="0"  detector="3"   module="4"  channel="18"
+map OSCAR PADTIME telescope="0"  detector="4"   module="4"  channel="19"
+map OSCAR PADTIME telescope="0"  detector="5"   module="4"  channel="20"
+map OSCAR PADTIME telescope="0"  detector="6"   module="4"  channel="21"
+map OSCAR PADTIME telescope="0"  detector="7"   module="4"  channel="22"
+map OSCAR PADTIME telescope="0"  detector="8"   module="4"  channel="23"
+map OSCAR PADTIME telescope="0"  detector="9"   module="4"  channel="24"
+map OSCAR PADTIME telescope="0"  detector="10"  module="4"  channel="25"
+map OSCAR PADTIME telescope="0"  detector="11"  module="4"  channel="26"
+map OSCAR PADTIME telescope="0"  detector="12"  module="4"  channel="27"
+map OSCAR PADTIME telescope="0"  detector="13"  module="4"  channel="28"
+map OSCAR PADTIME telescope="0"  detector="14"  module="4"  channel="29"
+map OSCAR PADTIME telescope="0"  detector="15"  module="4"  channel="30"
+map OSCAR PADTIME telescope="0"  detector="16"  module="4"  channel="31"
 
 ** detector mapping for Tel0
 map Tel0 ENERGY detector="0"   module="2"  channel="16"

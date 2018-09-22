@@ -57,7 +57,7 @@ int OSOSCARGeometry::Init(const char * nome_geom_file)
     if(LineReadCommentLess.empty()) continue;
     if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
     
-    std::istringstream LineStream(LineRead);
+    std::istringstream LineStream(LineReadCommentLess);
     
     std::string Det;
     double theta;

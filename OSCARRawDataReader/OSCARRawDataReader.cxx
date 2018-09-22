@@ -7,7 +7,7 @@ fInputTree(new TChain(gRunInfo->GetExperimentName())),
 fAnalyzer(0),
 fNumEvents(0),
 fData(new Int_t *[fFAIRDAQConfiguration->get_number_modules()])
-{
+{  
   for(unsigned int i=0; i<fFAIRDAQConfiguration->get_number_modules(); i++) {
     fData[i] = new Int_t[fFAIRDAQConfiguration->get_number_channels(i)];
   }

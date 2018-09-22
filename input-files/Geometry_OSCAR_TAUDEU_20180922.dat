@@ -6,4 +6,4 @@
 
 
 *detector            *strip        *pad          *theta (rad)         *phi (rad)
-OSCAR_TEL00          1             1             0                    0
+OSCAR_TEL_00          1             1             0                    0
