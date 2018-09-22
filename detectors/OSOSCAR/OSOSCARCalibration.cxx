@@ -1,65 +1,92 @@
 #include <OSOSCARCalibration.h>
 
-OSOSCARCalibration::OSOSCARCalibration() :
-NumStrips(16),
-NumPads(16)
+OSOSCARCalibration::OSOSCARCalibration(const char * det_name, int num_telescopes) :
+fName(det_name),
+fNumTelescopes(num_telescopes),
+fNumStrips(16),
+fNumPads(16),
+fStripIntercept(new double*[fNumTelescopes]),
+fStripSlope(new double*[fNumTelescopes]),
+fPadIntercept(new double*[fNumTelescopes]),
+fPadSlope(new double*[fNumTelescopes]),
+fStripThickness(new double*[fNumTelescopes]),
+fPadThickness(new double*[fNumTelescopes])
 {
-  a_coeff_strip =new Double_t[NumStrips];
-  b_coeff_strip =new Double_t[NumStrips];
-  a_coeff_pad   =new Double_t[NumPads];
-  b_coeff_pad   =new Double_t[NumPads];
-  thickness_strip=new Double_t[NumStrips];
-  thickness_pad  =new Double_t[NumPads];
+  for(int i=0; i<fNumStrips; i++) {
+    fStripIntercept[i]=(new double[fNumStrips]);
+    fStripSlope[i]=(new double[fNumStrips]);
+    fStripThickness[i]=(new double[fNumStrips]);
+  }
+  for(int i=0; i<fNumPads; i++) {
+    fPadIntercept[i]=(new double[fNumPads]);
+    fPadSlope[i]=(new double[fNumPads]);
+    fPadThickness[i]=(new double[fNumPads]);
+  }
 }
 
 OSOSCARCalibration::~OSOSCARCalibration()
 {
-  delete [] a_coeff_strip; 
-  delete [] b_coeff_strip; 
-  delete [] a_coeff_pad;   
-  delete [] b_coeff_pad;   
-  delete [] thickness_strip;
-  delete [] thickness_pad;  
+  for(int i=0; i<fNumStrips; i++) {
+    delete [] fStripIntercept[i];
+    delete [] fStripSlope[i];
+    delete [] fStripThickness[i];
+  }
+  for(int i=0; i<fNumPads; i++) {
+    delete [] fPadIntercept[i];
+    delete [] fPadSlope[i];
+    delete [] fPadThickness[i];
+  }
 }
 
 int OSOSCARCalibration::Init(const char * file_calib)
-{ 
-  std::fstream file_calibrations(file_calib,std::ios::in);
-  if(!file_calibrations.is_open()) {
-    printf("OSCAR Calibrations> Error: Failed to open calibration file\n");
-    return 0;
-  }
-    
-  Int_t    pid;
-  Double_t a_coeff;
-  Double_t b_coeff;
-  Double_t thickness;
-  int i=0;
-  
-  /*lettura del file di calibrazioni**************************************************************************/
-  for(i=0;file_calibrations>>pid>>a_coeff>>b_coeff>>thickness;i++)
-  {
-    if(pid/100 == 1)
-    {
-      a_coeff_strip [pid%100-1] =a_coeff;  /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
-      b_coeff_strip [pid%100-1] =b_coeff;  /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
-      thickness_strip[pid%100-1] =thickness; /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
-    }
-    else if(pid/100 == 2)
-    {
-      a_coeff_pad [pid%100-1] =a_coeff;  /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
-      b_coeff_pad [pid%100-1] =b_coeff;  /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/   
-      thickness_pad[pid%100-1] =thickness; /*-1 si usa per partire da 0 con la numerazione delle strip e pad*/
-    }
-  }
-  /***********************************************************************************************************/
-  
-  return 1;
-}
-
-Double_t GetIncEnergyAlpha(Double_t  DeltaE)
 {
-  return 306.73194764 - 72.86497866*DeltaE+ 8.87165151*pow(DeltaE,2) - 0.61645860*pow(DeltaE,3) + 0.02483404 *pow(DeltaE,4) - 0.00053874 *pow(DeltaE,5) + 0.00000487*pow(DeltaE,6);
+  std::ifstream FileIn(file_calib);
+
+  if(!FileIn.is_open()) {
+    printf("OSCAR Calibrations> Error: Failed to open calibration file %s\n", file_calib);
+    return -1;
+  }
+
+  int NRead=0;
+  
+  while (!FileIn.eof())
+  {
+    std::string LineRead;
+    std::getline(FileIn, LineRead);
+    std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
+
+    if(LineReadCommentLess.empty()) continue;
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
+    
+    std::istringstream LineStream(LineRead);
+    
+    std::string Det;
+    double b_coeff;
+    double a_coeff;
+    double thickness;
+    
+    LineStream>>Det>>b_coeff>>a_coeff>>thickness;
+    
+    if(Det.find(Form("%s_",fName.c_str()))!=0) continue; //not this OSCAR cluster
+    
+    int NumTel=std::stoi(Det.substr(Det.find("TEL_")+4,2));
+    
+    if(Det.find("PAD_")!=std::string::npos) {
+      int NumDet = std::stoi(Det.substr(Det.find("PAD_")+4));
+      fStripSlope[NumTel][NumDet-1]=a_coeff;
+      fStripIntercept[NumTel][NumDet-1]=b_coeff;
+      fStripThickness[NumTel][NumDet-1]=thickness;
+      NRead++;
+    } else if (Det.find("STRIP_")!=std::string::npos) {
+      int NumDet = std::stoi(Det.substr(Det.find("STRIP_")+6));
+      fPadSlope[NumTel][NumDet-1]=a_coeff;
+      fPadIntercept[NumTel][NumDet-1]=b_coeff;
+      fPadThickness[NumTel][NumDet-1]=thickness;
+      NRead++;
+    }
+  }
+  
+  return NRead;
 }
 
 void OSOSCARCalibration::PerformEventCalibration(std::vector<OSOSCARPhysicalParticle> *Particle)
@@ -69,27 +96,27 @@ void OSOSCARCalibration::PerformEventCalibration(std::vector<OSOSCARPhysicalPart
   Int_t num_strip;
   Int_t DE;
   Int_t Eres;
+  Int_t num_tel;
   
   for(int num_part=0; num_part<mult_phys; num_part++)
   {
+    num_tel  =(*Particle)[num_part].numtel;
     num_strip=(*Particle)[num_part].numstrip -1; /*facciamo -1 così da partire da 0*/
     num_pad  =(*Particle)[num_part].numpad -1; /*facciamo -1 così da partire da 0*/
     DE       =(*Particle)[num_part].DE;
     Eres     =(*Particle)[num_part].Eres;
-    Double_t Energy;
+    Double_t Energy=-9999;
     
-    if(!(*Particle)[num_part].identified) continue;
+    (*Particle)[num_part].DE_MeV  =fStripIntercept[num_tel][num_strip]+fStripSlope[num_tel][num_strip]*DE;
+    (*Particle)[num_part].Eres_MeV=fPadIntercept[num_tel][num_pad]  +fPadSlope[num_tel][num_pad]*Eres;
     
-    (*Particle)[num_part].DE_MeV  =b_coeff_strip[num_strip]+a_coeff_strip[num_strip]*DE;
-    (*Particle)[num_part].Eres_MeV=b_coeff_pad[num_pad]  +a_coeff_pad[num_pad]*Eres;
-    
-    if((*Particle)[num_part].stopped) /*particella stoppata nel 300 micron*/
+    if(!(*Particle)[num_part].identified || (*Particle)[num_part].stopped) /*particella stoppata nel 300 micron oppure non identificata*/
     {
       Energy=(*Particle)[num_part].DE_MeV+(*Particle)[num_part].Eres_MeV;
     }
-    else
+    else if (!(*Particle)[num_part].stopped)
     {
-      Energy=GetIncEnergyAlpha((*Particle)[num_part].DE_MeV+(*Particle)[num_part].Eres_MeV);
+      //Per ora non implementato
     }
     (*Particle)[num_part].energy=Energy;
   }

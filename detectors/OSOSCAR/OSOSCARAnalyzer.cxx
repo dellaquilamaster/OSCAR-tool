@@ -1,28 +1,29 @@
 #include <OSOSCARAnalyzer.h>
 
 //________________________________________________
-OSOSCARAnalyzer::OSOSCARAnalyzer(int num_telescopes) :
+OSOSCARAnalyzer::OSOSCARAnalyzer(const char * det_name, int num_telescopes) :
+fName(det_name),
 fNumTelescopes(num_telescopes),
 fParticle(new std::vector<OSOSCARPhysicalParticle>),
-fOscarIdentificator(new OSOSCARIdentification()),
-fOscarCalibrator(new OSOSCARCalibration()),
-fOscarGeometry(new OSOSCARGeometry()),
+fOscarIdentificator(new OSOSCARIdentification(fName.c_str(), fNumTelescopes)),
+fOscarCalibrator(new OSOSCARCalibration(fName.c_str(), fNumTelescopes)),
+fOscarGeometry(new OSOSCARGeometry(fName.c_str(), fNumTelescopes)),
 fIdentificationLoaded(false),
 fCalibrationLoaded(false),
 fGeometryLoaded(false)
 {
   //TEMPORARY, Calibration Loading
-  if(gRunInfo->GetOSCARGeometryFileName()[0]!='\0' && fOscarGeometry->Init(gRunInfo->GetOSCARGeometryFileName())>0) {
+  if(fOscarGeometry->Init(gRunInfo->GetOSCARGeometryFileName())>0) {
     printf("OSOSCARAnalyzer> Loaded OSCAR Geometry from file %s\n", gRunInfo->GetOSCARGeometryFileName());
     fGeometryLoaded=true;
   }
-  if(gRunInfo->GetOSCARCalibrationFileName()[0]!='\0' && fOscarCalibrator->Init(gRunInfo->GetOSCARCalibrationFileName())>0) {
-    printf("OSOSCARAnalyzer> Loaded OSCAR Calibration from file %s\n", gRunInfo->GetOSCARCalibrationFileName());
-    fCalibrationLoaded=true;
-  }
-  if(gRunInfo->GetOSCARIdentificationFileName()[0]!='\0' && fOscarIdentificator->Init(gRunInfo->GetOSCARIdentificationFileName())>0) {
+  if(fOscarIdentificator->Init(gRunInfo->GetOSCARIdentificationFileName())>0) {
     printf("OSOSCARAnalyzer> Loaded OSCAR Identification from file %s\n", gRunInfo->GetOSCARIdentificationFileName());
     fIdentificationLoaded=true;
+  }
+  if(fOscarCalibrator->Init(gRunInfo->GetOSCARCalibrationFileName())>0) {
+    printf("OSOSCARAnalyzer> Loaded OSCAR Calibration from file %s\n", gRunInfo->GetOSCARCalibrationFileName());
+    fCalibrationLoaded=true;
   }
 }
 
@@ -150,6 +151,7 @@ void OSOSCARAnalyzer::FillParticleTracks(OSOSCARTracks * ParticlesTrack, OSOSCAR
     new_particle.energy  =-9999;
     new_particle.DE_MeV  =-9999;
     new_particle.Eres_MeV=-9999;
+    new_particle.identified=false;
 
     new_particle.numtel   =NumTel;
     new_particle.DE       =(MappedData->fStrips[ParticlesTrack->IndexStrip[i]]).efront; //WARNING: inserisco nell'evento fisico alla posizione ciò che il buffer propone all'evento num_evt relativamente alla strip in indice IdTracks.IndexStrip
@@ -158,8 +160,8 @@ void OSOSCARAnalyzer::FillParticleTracks(OSOSCARTracks * ParticlesTrack, OSOSCAR
     new_particle.timepad  =(MappedData->fPads[ParticlesTrack->IndexPad[i]]).timepad;
     new_particle.numstrip =(MappedData->fStrips[ParticlesTrack->IndexStrip[i]]).numstrip;
     new_particle.numpad   =(MappedData->fPads[ParticlesTrack->IndexPad[i]]).numpad;
-    new_particle.theta    =fGeometryLoaded ? fOscarGeometry->GetThetaStripPad(new_particle.numstrip-1,new_particle.numpad-1) : -9999; //-1 per cominciare a contare da 0
-    new_particle.phi      =fGeometryLoaded ? fOscarGeometry->GetPhiStripPad(new_particle.numstrip-1,new_particle.numpad-1) : -9999;
+    new_particle.theta    =fGeometryLoaded ? fOscarGeometry->GetThetaStripPad(NumTel, new_particle.numstrip,new_particle.numpad) : -9999;
+    new_particle.phi      =fGeometryLoaded ? fOscarGeometry->GetPhiStripPad(NumTel, new_particle.numstrip,new_particle.numpad) : -9999;
     
     fParticle->push_back(new_particle);
   }

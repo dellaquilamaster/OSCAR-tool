@@ -13,7 +13,7 @@
 OSSingleTelescope::OSSingleTelescope(const char * name) : OSDetector(name),
 fevt(new OSSingleTelescopeRootEvent())
 {
-  fType.assign("SingleTelescope");
+  fType.assign("SingleTelescope");  
 }
 
 //________________________________________________
@@ -48,4 +48,6 @@ void OSSingleTelescope::FillMappedData()
   (fevt->fSingleTelescope).fEneSecond=(dModuleEneSecond()>=0) ? ((*fModuleData)[dModuleEneSecond()])[dChannelEneSecond()] : -9999;
   (fevt->fSingleTelescope).fTimeFirst=(dModuleTimeFirst()>=0) ? ((*fModuleData)[dModuleTimeFirst()])[dChannelTimeFirst()] : -9999;
   (fevt->fSingleTelescope).fTimeSecond=(dModuleTimeFirst()>=0) ? ((*fModuleData)[dModuleTimeFirst()])[dChannelTimeFirst()] : -9999;
+  
+  
 }

@@ -1,21 +1,29 @@
 #include <OSOSCARIdentification.h>
 
-OSOSCARIdentification::OSOSCARIdentification() :
-NumPads(16),
-NumStrips(16)
+OSOSCARIdentification::OSOSCARIdentification(const char * det_name, int num_telescopes) :
+fName(det_name),
+fNumTelescopes(num_telescopes),
+fNumStrips(16),
+fNumPads(16),
+IdStructure(new TOscarCutG**[fNumTelescopes]),
+PhysParticle(new OSOSCARParticleType[8])
 {
-  PhysParticle=new OSOSCARParticleType[8];
-  IdStructure=new TOscarCutG*[NumStrips]();
-  for(int i = 0; i<NumStrips; i++)
-  {
-    IdStructure[i]=new TOscarCutG[NumPads]; /*allocazione di NumPads puntatori a TOscarCutG per ognuna della NumStrips strip*/
+  for(int i=0; i<fNumTelescopes; i++) {
+    IdStructure[i]=new TOscarCutG*[fNumStrips]();
+    for(int j = 0; j<fNumStrips; j++)
+    {
+      IdStructure[i][j]=new TOscarCutG[fNumPads]; /*allocazione di NumPads puntatori a TOscarCutG per ognuna della NumStrips strip*/
+    }
   }
 }
 
 OSOSCARIdentification::~OSOSCARIdentification()
 {
-  for (int i=0; i<NumStrips; i++)
-  {
+  for(int i=0; i<fNumTelescopes; i++) {
+    for(int j = 0; j<fNumStrips; j++)
+    {
+      delete [] IdStructure[i][j];
+    }
     delete [] IdStructure[i];
   }
   delete [] IdStructure;
@@ -59,21 +67,22 @@ Int_t OSOSCARIdentification::Init(const char * cut_file)
   /*********************************************/
   
   /*Inizializzazione della struttura identificativa IdStructure*/
-  char nome_cut_S[30];
-  char nome_cut_P[30];
-  for(int num_strip = 1; num_strip<=NumStrips; num_strip++)
+  for(int num_tel=0; num_tel<fNumTelescopes; num_tel++)
   {
-    for(int num_pad=1; num_pad<=NumPads; num_pad++)
+    for(int num_strip = 1; num_strip<=fNumStrips; num_strip++)
     {
-      if( (num_pad-1)%4 == (num_strip-1)/4 ) /*se è così strip e pad individuano un incrocio fisico*/
-      { 
-        for(int i=0; i<8; i++) /*ciclo su tutti i tipi di particelle identificabili*/
-        {
-          sprintf(nome_cut_S,"de%02d_e%02d_%d_%d_S",num_strip,num_pad,PhysParticle[i].Z, PhysParticle[i].A);
-          sprintf(nome_cut_P,"de%02d_e%02d_%d_%d_P",num_strip,num_pad,PhysParticle[i].Z, PhysParticle[i].A);
-          /*estrazione dei cut grafici dal file*/
-          IdStructure[num_strip-1][num_pad-1].IdCut_S[i]=(TCutG*)CutFile->Get(nome_cut_S); /*il -1 è usato per far partire da 0 gli array*/
-          IdStructure[num_strip-1][num_pad-1].IdCut_P[i]=(TCutG*)CutFile->Get(nome_cut_P);
+      for(int num_pad=1; num_pad<=fNumPads; num_pad++)
+      {
+        if( (num_pad-1)%4 == (num_strip-1)/4 ) /*se è così strip e pad individuano un incrocio fisico*/
+        { 
+          for(int i=0; i<8; i++) /*ciclo su tutti i tipi di particelle identificabili*/
+          {
+            /*estrazione dei cut grafici dal file*/
+            IdStructure[num_tel][num_strip-1][num_pad-1].IdCut_S[i]=(TCutG*)CutFile->Get(
+              Form("%s_TEL%d_STRIP%02d_PAD%02d_Z%02d_A%02d_S",fName.c_str(),num_tel,num_strip,num_pad,PhysParticle[i].Z,PhysParticle[i].A)); /*il -1 è usato per far partire da 0 gli array*/
+            IdStructure[num_tel][num_strip-1][num_pad-1].IdCut_P[i]=(TCutG*)CutFile->Get(
+              Form("%s_TEL%d_STRIP%02d_PAD%02d_Z%02d_A%02d_P",fName.c_str(),num_tel,num_strip,num_pad,PhysParticle[i].Z,PhysParticle[i].A)); /*il -1 è usato per far partire da 0 gli array*/
+          }
         }
       }
     }
@@ -91,11 +100,13 @@ void OSOSCARIdentification::PerformEventIdentification(std::vector<OSOSCARPhysic
   Int_t num_strip;
   Int_t DE;
   Int_t Eres;
+  Int_t num_tel;
   bool  identified;
   int   type_part;
   
   for(int num_part=0; num_part<mult_phys; num_part++)
-  {    
+  {
+    num_tel  =(*Particle)[num_part].numtel;
     num_strip=(*Particle)[num_part].numstrip -1; /*facciamo -1 così da partire da 0*/
     num_pad  =(*Particle)[num_part].numpad -1; /*facciamo -1 così da partire da 0*/
     DE       =(*Particle)[num_part].DE;
@@ -104,13 +115,13 @@ void OSOSCARIdentification::PerformEventIdentification(std::vector<OSOSCARPhysic
     
     for(type_part=0; type_part<8; type_part++)
     {
-      if(IdStructure[num_strip][num_pad].IdCut_S[type_part]!=0 && IdStructure[num_strip][num_pad].IdCut_S[type_part]->IsInside(Eres,DE)) 
+      if(IdStructure[num_tel][num_strip][num_pad].IdCut_S[type_part]!=0 && IdStructure[num_tel][num_strip][num_pad].IdCut_S[type_part]->IsInside(Eres,DE)) 
       {
         identified=1; /*particella identificata*/
         (*Particle)[num_part].stopped=1; /*la particella è stoppata nel 300 micron*/
         break;
       }
-      else if(IdStructure[num_strip][num_pad].IdCut_P[type_part]!=0 && IdStructure[num_strip][num_pad].IdCut_P[type_part]->IsInside(Eres,DE))
+      else if(IdStructure[num_tel][num_strip][num_pad].IdCut_P[type_part]!=0 && IdStructure[num_tel][num_strip][num_pad].IdCut_P[type_part]->IsInside(Eres,DE))
       {
         identified=1; /*particella identificata*/
         (*Particle)[num_part].stopped=0; /*la particella non è stoppata nel 300 micron*/

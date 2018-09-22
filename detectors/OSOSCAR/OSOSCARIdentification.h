@@ -16,17 +16,19 @@
 class OSOSCARIdentification
 {
 public:
-  OSOSCARIdentification();
+  OSOSCARIdentification(const char *, int);
   ~OSOSCARIdentification();
   
   Int_t Init (const char * cut_file);
   void  PerformEventIdentification(std::vector<OSOSCARPhysicalParticle> *Particle);
   
 private:
-  TOscarCutG **  IdStructure; /*matrice di TOscarCutG, ognuna di tali strutture contiene un particolare incrocio di strip e pad*/
+  std::string fName;
+  int fNumTelescopes;
+  int fNumStrips;
+  int fNumPads;
+  TOscarCutG *** IdStructure; /*matrice di TOscarCutG, ognuna di tali strutture contiene un particolare incrocio di strip e pad*/
   OSOSCARParticleType * PhysParticle;
-  Int_t          NumPads;
-  Int_t          NumStrips;
 } ;
 
 #endif

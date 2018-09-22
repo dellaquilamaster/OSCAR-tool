@@ -4,61 +4,89 @@
 
 #include <OSOSCARGeometry.h>
 
-OSOSCARGeometry::OSOSCARGeometry () :
-N_strips(16),
-N_pads(16)
+OSOSCARGeometry::OSOSCARGeometry (const char * det_name, int num_telescopes) :
+fName(det_name),
+fNumTelescopes(num_telescopes),
+fNumStrips(16),
+fNumPads(16),
+ThetaTab(new double **[fNumTelescopes]),
+PhiTab(new double **[fNumTelescopes])
 {
-  ThetaTab=(Double_t **)new Double_t*[N_strips];
-  PhiTab=(Double_t **)new Double_t*[N_strips];
-  for(int i=0; i<N_strips; i++)
-  {
-    ThetaTab[i]=(Double_t *)new Double_t[N_pads](); 
-    PhiTab[i]=(Double_t *)new Double_t[N_pads](); 
+  for(int i=0; i<fNumTelescopes; i++) {
+    ThetaTab[i]=(Double_t **)new Double_t*[fNumStrips];
+    PhiTab[i]=(Double_t **)new Double_t*[fNumStrips];
+    for(int j=0; j<fNumStrips; j++)
+    {
+      ThetaTab[i][j]=(Double_t *)new Double_t[fNumPads](); 
+      PhiTab[i][j]=(Double_t *)new Double_t[fNumPads](); 
+    }
   }
 }
 
 OSOSCARGeometry::~OSOSCARGeometry()
 {
-  for(int i=0; i<N_strips; i++)
-  {
+  for(int i=0; i<fNumTelescopes; i++) {
+    for(int j=0; j<fNumStrips; j++) {
+      delete [] ThetaTab[i][j]; 
+      delete [] PhiTab[i][j]; 
+    }
     delete [] ThetaTab[i];
-    delete [] PhiTab[i];    
+    delete [] PhiTab[i];
   }
   delete [] ThetaTab;
   delete [] PhiTab;
 }
 
 int OSOSCARGeometry::Init(const char * nome_geom_file)
-{
-  int n_reads=0;
-  std::ifstream geometry_file (nome_geom_file);
-  if(!geometry_file.is_open()){
-    printf("OSCAR Geometry> Error: Failed to open geometry file");
-    return 0;
-  }    
-    
-  for( int i=0 ; i<N_strips; i++) /*ciclo sulle strips*/
+{  
+  std::ifstream FileIn(nome_geom_file);
+
+  if(!FileIn.is_open()) {
+    printf("OSCAR Geometry> Error: Failed to open geometry file %s\n", nome_geom_file);
+    return -1;
+  }  
+  
+  int NRead=0;
+  
+  while (!FileIn.eof())
   {
-    for( int j=0; j<N_pads; j++) /*ciclo sui pads*/
-    {
-      if(j%4 != i/4) continue; /*incrocio non fisico --> saltare*/
-      
-      if(geometry_file>>ThetaTab[i][j]>>PhiTab[i][j])
-      {
-        n_reads++; 
-      }
-    }
+    std::string LineRead;
+    std::getline(FileIn, LineRead);
+    std::string LineReadCommentLess(LineRead.substr(0,LineRead.find("*")));
+
+    if(LineReadCommentLess.empty()) continue;
+    if(LineReadCommentLess.find_first_not_of(' ') == std::string::npos) continue;
+    
+    std::istringstream LineStream(LineRead);
+    
+    std::string Det;
+    double theta;
+    double phi;
+    int num_strip;
+    int num_pad;
+    
+    LineStream>>Det>>num_strip>>num_pad>>theta>>phi;
+    
+    if(Det.find(Form("%s_",fName.c_str()))!=0) continue; //not this OSCAR cluster
+    
+    int NumTel=std::stoi(Det.substr(Det.find("TEL_")+4,2));
+    
+    ThetaTab[NumTel][num_strip-1][num_pad-1]=theta;
+    PhiTab[NumTel][num_strip-1][num_pad-1]=phi;
+    
+    NRead++;
   }
-  geometry_file.close();
-  return n_reads;
+  
+  FileIn.close();
+  return NRead;
 }
 
-Double_t OSOSCARGeometry::GetThetaStripPad(Int_t n_strip, Int_t n_pads)
+Double_t OSOSCARGeometry::GetThetaStripPad(int n_tel, int n_strip, int n_pads)
 {
-  return ThetaTab[n_strip][n_pads]; 
+  return ThetaTab[n_tel][n_strip-1][n_pads-1]; 
 }
 
-Double_t OSOSCARGeometry::GetPhiStripPad(Int_t n_strip, Int_t n_pads)
+Double_t OSOSCARGeometry::GetPhiStripPad(int n_tel, int n_strip, int n_pads)
 {
-  return PhiTab[n_strip][n_pads]; 
+  return PhiTab[n_tel][n_strip-1][n_pads-1]; 
 }

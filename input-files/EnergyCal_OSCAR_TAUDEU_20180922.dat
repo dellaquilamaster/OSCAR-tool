@@ -1,0 +1,41 @@
+***********************************************************
+* OSCAR-tool energy calibration file for the OSCAR detector
+* Each OSCAR detector has a given name as defined in the mapping file, and can contain a certain number of individual telescopes
+* To give energy calibration for an OSCAR cluster called "OSCARCLUSTER", telescope 0, strip 1, one can write: OSCARCLUSTER_TEL_00_STRIP_01
+***********************************************************
+
+
+*detector            *intercept (MeV)      *slope (MeV/ch)         *thickness (um)
+OSCAR_TEL_00_STRIP_01    0                     1                       20
+OSCAR_TEL_00_STRIP_02    0                     1                       20
+OSCAR_TEL_00_STRIP_03    0                     1                       20
+OSCAR_TEL_00_STRIP_04    0                     1                       20
+OSCAR_TEL_00_STRIP_05    0                     1                       20
+OSCAR_TEL_00_STRIP_06    0                     1                       20
+OSCAR_TEL_00_STRIP_07    0                     1                       20
+OSCAR_TEL_00_STRIP_08    0                     1                       20
+OSCAR_TEL_00_STRIP_09    0                     1                       20
+OSCAR_TEL_00_STRIP_10    0                     1                       20
+OSCAR_TEL_00_STRIP_11    0                     1                       20
+OSCAR_TEL_00_STRIP_12    0                     1                       20
+OSCAR_TEL_00_STRIP_13    0                     1                       20
+OSCAR_TEL_00_STRIP_14    0                     1                       20
+OSCAR_TEL_00_STRIP_15    0                     1                       20
+OSCAR_TEL_00_STRIP_16    0                     1                       20
+
+OSCAR_TEL_00_PAD_01    0                     1                       20
+OSCAR_TEL_00_PAD_02    0                     1                       20
+OSCAR_TEL_00_PAD_03    0                     1                       20
+OSCAR_TEL_00_PAD_04    0                     1                       20
+OSCAR_TEL_00_PAD_05    0                     1                       20
+OSCAR_TEL_00_PAD_06    0                     1                       20
+OSCAR_TEL_00_PAD_07    0                     1                       20
+OSCAR_TEL_00_PAD_08    0                     1                       20
+OSCAR_TEL_00_PAD_09    0                     1                       20
+OSCAR_TEL_00_PAD_10    0                     1                       20
+OSCAR_TEL_00_PAD_11    0                     1                       20
+OSCAR_TEL_00_PAD_12    0                     1                       20
+OSCAR_TEL_00_PAD_13    0                     1                       20
+OSCAR_TEL_00_PAD_14    0                     1                       20
+OSCAR_TEL_00_PAD_15    0                     1                       20
+OSCAR_TEL_00_PAD_16    0                     1                       20

@@ -16,12 +16,13 @@
 class OSOSCARAnalyzer
 {
 public:
-  OSOSCARAnalyzer(int);
+  OSOSCARAnalyzer(const char *, int);
   ~OSOSCARAnalyzer();
   
   std::vector<OSOSCARPhysicalParticle> * AnalyzeEvent(OSOSCARTelescope **);
   
 private:
+  std::string fName;
   int fNumTelescopes;
   
   OSOSCARTracks            FindTracks(OSOSCARTelescope *);

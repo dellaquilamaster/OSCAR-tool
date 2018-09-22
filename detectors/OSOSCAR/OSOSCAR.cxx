@@ -13,7 +13,7 @@
 OSOSCAR::OSOSCAR(const char * name, int num_detectors) : OSDetector(name, num_detectors),
 fOSCARMapped(new OSOSCARTelescope*[fNumDetectors]),
 fevt(new OSOSCARRootEvent(fNumDetectors)),
-fTheAnalyzer(new OSOSCARAnalyzer(fNumDetectors))
+fTheAnalyzer(new OSOSCARAnalyzer(name, fNumDetectors))
 {
   fType.assign("OSCAR");
   for(int i=0; i<fNumDetectors; i++) {
