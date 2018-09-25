@@ -73,15 +73,15 @@ int OSOSCARCalibration::Init(const char * file_calib)
     
     if(Det.find("PAD_")!=std::string::npos) {
       int NumDet = std::stoi(Det.substr(Det.find("PAD_")+4));
-      fStripSlope[NumTel][NumDet-1]=a_coeff;
-      fStripIntercept[NumTel][NumDet-1]=b_coeff;
-      fStripThickness[NumTel][NumDet-1]=thickness;
-      NRead++;
-    } else if (Det.find("STRIP_")!=std::string::npos) {
-      int NumDet = std::stoi(Det.substr(Det.find("STRIP_")+6));
       fPadSlope[NumTel][NumDet-1]=a_coeff;
       fPadIntercept[NumTel][NumDet-1]=b_coeff;
       fPadThickness[NumTel][NumDet-1]=thickness;
+      NRead++;
+    } else if (Det.find("STRIP_")!=std::string::npos) {
+      int NumDet = std::stoi(Det.substr(Det.find("STRIP_")+6));
+      fStripSlope[NumTel][NumDet-1]=a_coeff;
+      fStripIntercept[NumTel][NumDet-1]=b_coeff;
+      fStripThickness[NumTel][NumDet-1]=thickness;
       NRead++;
     }
   }
