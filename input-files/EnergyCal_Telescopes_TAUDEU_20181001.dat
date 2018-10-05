@@ -1,0 +1,14 @@
+***********************************************************
+* OSCAR-tool energy calibration file for the SingleTelescope detector
+* Each SingleTelescope detector has a given name as defined in the mapping file, and contain always a DE stage and E stage
+* Example:
+* Tel05_DE intercept_MeV slope_MeV/ch thickness_um --> this gives energy calibration and thickness to the DE stage of the SingleTelescope called Tel05 
+***********************************************************
+
+*detector_stage       *intercept (MeV)        *slope (MeV/cm)          *thickness (um)
+Tel0_DE        	      0.12978	                0.0009581              17.5    
+Tel0_E        	      0.2956	                0.002662               500
+
+
+Tel1_DE        	      0.10137	                0.0010515              25    
+Tel1_E        	      0.28058	                0.0027081              500
