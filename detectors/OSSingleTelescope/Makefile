@@ -10,6 +10,7 @@ INCLUDES  := -I$(OSCARSRC)/
 INCLUDES  += -I$(OSCARSRC)/detectors/OSDetector
 INCLUDES  += -I$(OSCARSRC)/detectors/OSSingleTelescope
 INCLUDES  += -I$(OSCARSRC)/OSCARDetectorMap
+INCLUDES  += -I$(OSCARSRC)/OSRunInfo
 INCLUDES  += -I$(OSCARSRC)/shared
 
 RLIBS     := -L$(OSCARLIB)

@@ -8,7 +8,6 @@
 #include <string.h>
 #include <vector>
 
-
 #include <TOscarCutG.h>
 #include <OSOSCARParticleType.h>
 #include <OSOSCARPhysicalParticle.h>

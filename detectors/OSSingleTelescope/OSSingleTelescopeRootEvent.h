@@ -13,8 +13,9 @@ public :
   Int_t     fTimeFirst;
   Int_t     fTimeSecond;
   
-  Int_t     fEneFirstCal;
-  Int_t     fEneSecondCal;
+  double    fEneFirstCal;
+  double    fEneSecondCal;
+  double    fEnergyCal;
 
   Double_t  fTheta;        
   Double_t  fPhi;          

@@ -1,0 +1,9 @@
+***********************************************************
+* OSCAR-tool geometry file for the OSCAR detector
+* Each OSCAR detector has a given name as defined in the mapping file, and can contain a certain number of individual telescopes
+* To specify theta and phi angles for an OSCAR cluster called "OSCARCLUSTER", telescope 0, one can write: OSCARCLUSTER_TEL_00
+***********************************************************
+
+
+*detector            *strip        *pad          *theta (rad)         *phi (rad)
+OSCAR_TEL_00          1             1             0                    0

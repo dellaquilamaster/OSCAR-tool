@@ -1,0 +1,12 @@
+***********************************************************
+* OSCAR-tool geometry calibration file for the SingleTelescope detector
+* Each SingleTelescope detector has a given name as defined in the mapping file
+* Example:
+* Tel05 theta_deg phi_deg --> this gives theta and phi (in deg) for the detector of type SingleTelescope called Tel05 
+***********************************************************
+
+*detector       theta (deg)       phi (deg)
+Tel0        	35                 0 
+
+
+Tel1        	55                 0   

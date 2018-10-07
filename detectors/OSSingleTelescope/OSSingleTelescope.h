@@ -5,6 +5,7 @@
 #include <OSDetector.h>
 #include <OSSingleTelescopeRootEvent.h>
 #include <OSSingleTelescopeMap.h>
+#include <OSSingleTelescopeAnalyzer.h>
 
 #include <OSCARShared.h>
 
@@ -22,6 +23,7 @@ public :
 
 private :
   OSSingleTelescopeRootEvent * fevt;                     //!RootEvent type of the detector
+  OSSingleTelescopeAnalyzer * fTheAnalyzer;              //!The analyzer of this detector
 
 };
 

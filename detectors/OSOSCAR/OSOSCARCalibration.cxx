@@ -110,13 +110,13 @@ void OSOSCARCalibration::PerformEventCalibration(std::vector<OSOSCARPhysicalPart
     (*Particle)[num_part].DE_MeV  =fStripIntercept[num_tel][num_strip]+fStripSlope[num_tel][num_strip]*DE;
     (*Particle)[num_part].Eres_MeV=fPadIntercept[num_tel][num_pad]  +fPadSlope[num_tel][num_pad]*Eres;
     
-    if(!(*Particle)[num_part].identified || (*Particle)[num_part].stopped) /*particella stoppata nel 300 micron oppure non identificata*/
+    if((*Particle)[num_part].identified && (*Particle)[num_part].stopped) //Particle detected in stopping
     {
       Energy=(*Particle)[num_part].DE_MeV+(*Particle)[num_part].Eres_MeV;
     }
-    else if (!(*Particle)[num_part].stopped)
+    else if ((*Particle)[num_part].identified && !(*Particle)[num_part].stopped) //Particle detected in punch-through
     {
-      //Per ora non implementato
+      //TO BE IMPLEMENTED
     }
     (*Particle)[num_part].energy=Energy;
   }
